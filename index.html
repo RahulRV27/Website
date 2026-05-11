@@ -1,0 +1,1133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>For Mithuu</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;500;600;700&family=Dancing+Script:wght@400;500;600;700&family=Satisfy&family=La+Belle+Aurore&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+:root {
+  --bg-warm: #f5e6d3;
+  --bg-card: #fdf8f0;
+  --text-ink: #4a3728;
+  --text-soft: #7a6455;
+  --accent-rose: #d4a0a0;
+  --accent-blush: #e8c4c4;
+  --accent-gold: #c9a96e;
+  --accent-sage: #a8b5a0;
+  --shadow-warm: rgba(74, 55, 40, 0.12);
+}
+
+html {
+  scroll-behavior: smooth;
+  overflow-x: hidden;
+}
+
+body {
+  font-family: 'Caveat', cursive;
+  background-color: var(--bg-warm);
+  color: var(--text-ink);
+  overflow-x: hidden;
+  min-height: 100vh;
+  position: relative;
+}
+
+/* Paper texture overlay */
+body::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 0;
+  background-image:
+    repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 29px,
+      rgba(74, 55, 40, 0.03) 29px,
+      rgba(74, 55, 40, 0.03) 30px
+    ),
+    repeating-linear-gradient(
+      90deg,
+      transparent,
+      transparent 29px,
+      rgba(74, 55, 40, 0.02) 29px,
+      rgba(74, 55, 40, 0.02) 30px
+    );
+}
+
+/* Grain / noise texture */
+body::after {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 1;
+  opacity: 0.3;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.4'/%3E%3C/svg%3E");
+}
+
+/* ── Opening curtain ── */
+.curtain {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  background: linear-gradient(135deg, #f5e6d3 0%, #e8d5c0 50%, #f0dcc8 100%);
+  transition: opacity 1.2s ease, transform 1.2s ease;
+}
+
+.curtain.open {
+  opacity: 0;
+  transform: scale(1.05);
+  pointer-events: none;
+}
+
+.curtain-text {
+  font-family: 'La Belle Aurore', cursive;
+  font-size: clamp(1.4rem, 4vw, 2.4rem);
+  color: var(--text-soft);
+  opacity: 0;
+  animation: curtainFade 2s ease 0.5s forwards;
+  text-align: center;
+  padding: 0 2rem;
+}
+
+.curtain-heart {
+  font-size: 2.5rem;
+  opacity: 0;
+  animation: curtainFade 1.5s ease 1.8s forwards, heartPulse 1.5s ease infinite 1.8s;
+  margin-top: 1rem;
+}
+
+.curtain-scroll-hint {
+  position: absolute;
+  bottom: 3rem;
+  left: 50%;
+  transform: translateX(-50%);
+  text-align: center;
+  opacity: 0;
+  animation: curtainFade 1.5s ease 3s forwards;
+}
+
+.curtain-scroll-hint span {
+  font-family: 'Caveat', cursive;
+  font-size: 1.15rem;
+  color: var(--text-soft);
+  opacity: 0.7;
+  display: block;
+}
+
+.curtain-scroll-hint .curtain-arrow {
+  font-size: 1.3rem;
+  animation: bounceDown 2s ease infinite;
+  opacity: 0.5;
+}
+
+@keyframes curtainFade {
+  to { opacity: 1; }
+}
+
+@keyframes heartPulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.15); }
+}
+
+/* ── Music button ── */
+.music-btn {
+  position: fixed;
+  bottom: 2rem;
+  right: 2rem;
+  z-index: 1000;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  border: 2px solid var(--accent-rose);
+  background: var(--bg-card);
+  color: var(--text-ink);
+  font-size: 1.3rem;
+  cursor: pointer;
+  box-shadow: 0 4px 15px var(--shadow-warm);
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  animation: fadeUp 1s ease 4s forwards;
+}
+
+.music-btn:hover {
+  transform: scale(1.1);
+  box-shadow: 0 6px 20px rgba(212, 160, 160, 0.3);
+}
+
+.music-btn.playing {
+  animation: fadeUp 1s ease 4s forwards, musicPulse 2s ease infinite;
+}
+
+@keyframes musicPulse {
+  0%, 100% { box-shadow: 0 4px 15px var(--shadow-warm); }
+  50% { box-shadow: 0 4px 25px rgba(212, 160, 160, 0.5); }
+}
+
+/* ── Floating doodles ── */
+.doodle {
+  position: fixed;
+  z-index: 2;
+  font-size: 3rem;
+  opacity: 0.35;
+  pointer-events: none;
+  animation: floatDoodle 8s ease-in-out infinite;
+  filter: grayscale(10%);
+}
+
+.doodle:nth-child(1)  { top: 5%;  left: 4%;  animation-delay: 0s;   animation-duration: 9s; }
+.doodle:nth-child(2)  { top: 12%; right: 6%; animation-delay: 1.5s; animation-duration: 7s; }
+.doodle:nth-child(3)  { top: 22%; left: 2%;  animation-delay: 3s;   animation-duration: 10s; }
+.doodle:nth-child(4)  { top: 30%; right: 4%; animation-delay: 2s;   animation-duration: 8s; }
+.doodle:nth-child(5)  { top: 40%; left: 6%;  animation-delay: 4s;   animation-duration: 9s; }
+.doodle:nth-child(6)  { top: 48%; right: 3%; animation-delay: 1s;   animation-duration: 7.5s; }
+.doodle:nth-child(7)  { top: 55%; left: 3%;  animation-delay: 5s;   animation-duration: 11s; }
+.doodle:nth-child(8)  { top: 63%; right: 7%; animation-delay: 2.5s; animation-duration: 8.5s; }
+.doodle:nth-child(9)  { top: 72%; left: 5%;  animation-delay: 3.5s; animation-duration: 9.5s; }
+.doodle:nth-child(10) { top: 78%; right: 5%; animation-delay: 0.5s; animation-duration: 8s; }
+.doodle:nth-child(11) { top: 85%; left: 3%;  animation-delay: 4.5s; animation-duration: 10s; }
+.doodle:nth-child(12) { top: 92%; right: 8%; animation-delay: 2s;   animation-duration: 7s; }
+.doodle:nth-child(13) { top: 18%; left: 7%;  animation-delay: 1s;   animation-duration: 9s; }
+
+@keyframes floatDoodle {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  25% { transform: translateY(-12px) rotate(3deg); }
+  50% { transform: translateY(-5px) rotate(-2deg); }
+  75% { transform: translateY(-15px) rotate(2deg); }
+}
+
+/* ── Floating particles (hearts & stars) ── */
+.particles-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 3;
+  overflow: hidden;
+}
+
+.particle {
+  position: absolute;
+  opacity: 0;
+  font-size: 1.4rem;
+  animation: floatParticle linear infinite;
+}
+
+.particle.golden {
+  color: #c9a96e;
+  text-shadow: 0 0 6px rgba(201, 169, 110, 0.6), 0 0 14px rgba(201, 169, 110, 0.3);
+  animation: floatParticle linear infinite, sparkle 1.5s ease-in-out infinite;
+}
+
+@keyframes floatParticle {
+  0% {
+    opacity: 0;
+    transform: translateY(100vh) rotate(0deg) scale(0.6);
+  }
+  10% {
+    opacity: 0.35;
+  }
+  90% {
+    opacity: 0.35;
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-10vh) rotate(360deg) scale(1.2);
+  }
+}
+
+@keyframes sparkle {
+  0%, 100% { text-shadow: 0 0 6px rgba(201,169,110,0.6), 0 0 14px rgba(201,169,110,0.3); filter: brightness(1); }
+  50% { text-shadow: 0 0 12px rgba(201,169,110,0.9), 0 0 24px rgba(201,169,110,0.5), 0 0 36px rgba(201,169,110,0.2); filter: brightness(1.3); }
+}
+
+/* ── Scroll indicator ── */
+.scroll-hint {
+  position: fixed;
+  bottom: 2rem;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 100;
+  opacity: 0;
+  animation: fadeUp 1s ease 4.5s forwards;
+  transition: opacity 0.5s ease;
+  text-align: center;
+}
+
+.scroll-hint span {
+  font-family: 'Caveat', cursive;
+  font-size: 1rem;
+  color: var(--text-soft);
+  opacity: 0.6;
+}
+
+.scroll-hint .arrow {
+  display: block;
+  font-size: 1.2rem;
+  animation: bounceDown 2s ease infinite;
+  opacity: 0.5;
+}
+
+@keyframes bounceDown {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(6px); }
+}
+
+.scroll-hint.hidden {
+  opacity: 0 !important;
+  pointer-events: none;
+}
+
+/* ── Main content ── */
+main {
+  position: relative;
+  z-index: 10;
+}
+
+/* ── Landing section ── */
+.landing {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 2rem;
+  position: relative;
+}
+
+.landing-inner {
+  opacity: 0;
+  transform: translateY(30px);
+  animation: fadeUp 1.5s ease 3.5s forwards;
+}
+
+.landing-clover {
+  font-size: 3rem;
+  display: block;
+  margin-bottom: 1rem;
+  animation: gentleSpin 6s ease-in-out infinite;
+  opacity: 0;
+  animation: fadeUp 1s ease 3.2s forwards, gentleSpin 6s ease-in-out infinite 3.2s;
+}
+
+@keyframes gentleSpin {
+  0%, 100% { transform: rotate(0deg) scale(1); }
+  50% { transform: rotate(10deg) scale(1.05); }
+}
+
+.landing h1 {
+  font-family: 'Dancing Script', cursive;
+  font-size: clamp(2.8rem, 8vw, 5rem);
+  font-weight: 700;
+  color: var(--text-ink);
+  margin-bottom: 1rem;
+  letter-spacing: 1px;
+  line-height: 1.2;
+}
+
+.landing .subtitle {
+  font-family: 'La Belle Aurore', cursive;
+  font-size: clamp(1.1rem, 3vw, 1.6rem);
+  color: var(--text-soft);
+  font-style: italic;
+  margin-top: 0.5rem;
+  opacity: 0.85;
+}
+
+.landing-divider {
+  width: 80px;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--accent-rose), transparent);
+  margin: 1.5rem auto;
+  border: none;
+}
+
+/* ── Section base ── */
+section {
+  padding: 4rem 1.5rem;
+  max-width: 750px;
+  margin: 0 auto;
+}
+
+/* ── Fade-in on scroll ── */
+.reveal {
+  opacity: 0;
+  transform: translateY(40px);
+  transition: opacity 0.9s ease, transform 0.9s ease;
+}
+
+.reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+@keyframes fadeUp {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ── Paper card ── */
+.paper-card {
+  background: var(--bg-card);
+  border-radius: 16px;
+  padding: clamp(2rem, 5vw, 3rem);
+  box-shadow:
+    0 2px 8px var(--shadow-warm),
+    0 8px 30px rgba(74, 55, 40, 0.08),
+    inset 0 1px 0 rgba(255, 255, 255, 0.6);
+  position: relative;
+  overflow: hidden;
+}
+
+.paper-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background:
+    linear-gradient(135deg, rgba(255,255,255,0.15) 0%, transparent 50%),
+    radial-gradient(ellipse at 20% 80%, rgba(212,160,160,0.06) 0%, transparent 60%);
+  pointer-events: none;
+}
+
+.paper-card.tilt-left {
+  transform: rotate(-0.8deg);
+}
+
+.paper-card.tilt-right {
+  transform: rotate(0.6deg);
+}
+
+.paper-card.tilt-left.visible {
+  transform: rotate(-0.8deg) translateY(0);
+}
+
+.paper-card.tilt-right.visible {
+  transform: rotate(0.6deg) translateY(0);
+}
+
+/* ── Tape / pin decoration ── */
+.tape {
+  position: absolute;
+  width: 60px;
+  height: 22px;
+  background: rgba(212, 160, 160, 0.25);
+  border-radius: 2px;
+  z-index: 2;
+}
+
+.tape-top-left {
+  top: -6px;
+  left: 20px;
+  transform: rotate(-25deg);
+}
+
+.tape-top-right {
+  top: -6px;
+  right: 20px;
+  transform: rotate(20deg);
+}
+
+/* ── Section titles ── */
+.section-label {
+  font-family: 'Dancing Script', cursive;
+  font-size: clamp(1.8rem, 5vw, 2.5rem);
+  font-weight: 600;
+  color: var(--text-ink);
+  text-align: center;
+  margin-bottom: 2rem;
+  position: relative;
+  display: inline-block;
+  width: 100%;
+}
+
+.section-label::after {
+  content: '';
+  display: block;
+  width: 50px;
+  height: 2px;
+  background: var(--accent-rose);
+  margin: 0.5rem auto 0;
+  border-radius: 2px;
+}
+
+/* ── Poem section ── */
+.poem-section {
+  padding-top: 2rem;
+}
+
+.poem-body {
+  font-family: 'Caveat', cursive;
+  font-size: clamp(1.25rem, 3.5vw, 1.55rem);
+  line-height: 2;
+  color: var(--text-ink);
+  text-align: center;
+  white-space: pre-line;
+  position: relative;
+  z-index: 1;
+}
+
+.poem-body .stanza {
+  margin-bottom: 1.8rem;
+}
+
+.poem-body .stanza:last-child {
+  margin-bottom: 0;
+}
+
+/* ── Letter section ── */
+.letter-section {
+  padding-top: 2rem;
+}
+
+.letter-body {
+  font-family: 'La Belle Aurore', cursive;
+  font-size: clamp(1.1rem, 3vw, 1.35rem);
+  line-height: 2.1;
+  color: var(--text-ink);
+  position: relative;
+  z-index: 1;
+}
+
+.letter-body p {
+  margin-bottom: 1.2rem;
+  text-indent: 1.5rem;
+}
+
+.letter-body p:first-child {
+  text-indent: 0;
+}
+
+.letter-body .letter-greeting {
+  font-family: 'Caveat', cursive;
+  font-size: 1.4rem;
+  font-weight: 600;
+  text-indent: 0;
+  margin-bottom: 1.5rem;
+}
+
+.letter-body .letter-closing {
+  text-indent: 0;
+  margin-top: 2rem;
+  text-align: right;
+  font-style: italic;
+}
+
+/* ── Ending section ── */
+.ending-section {
+  min-height: 60vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 4rem 2rem;
+}
+
+.ending-quote {
+  font-family: 'Dancing Script', cursive;
+  font-size: clamp(1.6rem, 5vw, 2.8rem);
+  font-weight: 600;
+  color: var(--text-ink);
+  line-height: 1.5;
+  opacity: 0.9;
+  max-width: 600px;
+}
+
+.ending-quote::before {
+  content: '\201C';
+  font-size: 3rem;
+  color: var(--accent-rose);
+  display: block;
+  margin-bottom: 0.5rem;
+  line-height: 1;
+}
+
+.ending-doodle {
+  margin-top: 2rem;
+  font-size: 1.5rem;
+  opacity: 0.4;
+  animation: gentleSpin 8s ease-in-out infinite;
+}
+
+.ending-footer {
+  margin-top: 3rem;
+  font-family: 'Caveat', cursive;
+  font-size: 1rem;
+  color: var(--text-soft);
+  opacity: 0.5;
+}
+
+/* ── Decorative line doodles between sections ── */
+.section-break {
+  text-align: center;
+  padding: 2rem 0;
+  opacity: 0.3;
+  font-size: 1.5rem;
+  letter-spacing: 1rem;
+}
+
+/* ── Corner doodle inside cards ── */
+.card-doodle {
+  position: absolute;
+  font-size: 1.4rem;
+  opacity: 0.12;
+  z-index: 0;
+}
+
+.card-doodle.top-right {
+  top: 12px;
+  right: 16px;
+}
+
+.card-doodle.bottom-left {
+  bottom: 12px;
+  left: 16px;
+}
+
+.card-doodle.bottom-right {
+  bottom: 12px;
+  right: 16px;
+}
+
+/* ── Inline quote box ── */
+.letter-quote-box {
+  margin: 2rem 0;
+  padding: 1.5rem 2rem;
+  background: linear-gradient(135deg, rgba(212,160,160,0.08) 0%, rgba(201,169,110,0.06) 100%);
+  border-left: 3px solid var(--accent-rose);
+  border-radius: 0 12px 12px 0;
+  font-family: 'Dancing Script', cursive;
+  font-size: clamp(1.15rem, 3vw, 1.4rem);
+  font-weight: 500;
+  line-height: 1.8;
+  color: var(--text-ink);
+  text-indent: 0;
+  text-align: center;
+  font-style: italic;
+  opacity: 0.9;
+  box-shadow: 0 2px 12px rgba(74, 55, 40, 0.06);
+}
+
+/* ── Ink splatter decoration ── */
+.ink-splat {
+  position: absolute;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(212,160,160,0.15) 0%, transparent 70%);
+  z-index: 0;
+}
+
+/* ── Mobile responsive ── */
+@media (max-width: 768px) {
+  .doodle {
+    font-size: 2.2rem;
+    opacity: 0.25;
+  }
+
+  .paper-card {
+    border-radius: 12px;
+    margin-left: 0.5rem;
+    margin-right: 0.5rem;
+  }
+
+  .paper-card.tilt-left,
+  .paper-card.tilt-right,
+  .paper-card.tilt-left.visible,
+  .paper-card.tilt-right.visible {
+    transform: rotate(0deg);
+  }
+
+  .tape {
+    display: none;
+  }
+
+  .music-btn {
+    bottom: 1.2rem;
+    right: 1.2rem;
+    width: 44px;
+    height: 44px;
+    font-size: 1.1rem;
+  }
+
+  section {
+    padding: 3rem 1rem;
+  }
+
+  .poem-body {
+    line-height: 1.9;
+  }
+
+  .letter-body {
+    line-height: 1.95;
+  }
+}
+
+@media (max-width: 400px) {
+  .landing h1 {
+    font-size: 2.4rem;
+  }
+
+  .paper-card {
+    padding: 1.5rem;
+  }
+}
+
+/* ── Selection color ── */
+::selection {
+  background: var(--accent-blush);
+  color: var(--text-ink);
+}
+
+/* ── Scrollbar ── */
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--bg-warm);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--accent-rose);
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--text-soft);
+}
+</style>
+</head>
+<body>
+
+<!-- ── Opening Curtain ── -->
+<div class="curtain" id="curtain">
+  <div class="curtain-text">a little something, just for you...</div>
+  <div class="curtain-heart">&#x1F49B;</div>
+  <div class="curtain-scroll-hint">
+    <span>scroll to continue</span>
+    <span class="curtain-arrow">&#x2193;</span>
+  </div>
+</div>
+
+<!-- ── Floating Doodles ── -->
+<div class="doodle">&#x1F412;</div>
+<div class="doodle">&#x1F33B;</div>
+<div class="doodle">&#x1F42D;</div>
+<div class="doodle">&#x1F349;</div>
+<div class="doodle">&#x1F319;</div>
+<div class="doodle">&#x1F427;</div>
+<div class="doodle">&#x1F412;</div>
+<div class="doodle">&#x1F33B;</div>
+<div class="doodle">&#x1F427;</div>
+<div class="doodle">&#x1F42D;</div>
+<div class="doodle">&#x1F349;</div>
+<div class="doodle">&#x1F319;</div>
+<div class="doodle">&#x1F427;</div>
+
+<!-- ── Floating Hearts & Stars ── -->
+<div class="particles-container" id="particles"></div>
+
+<!-- ── Music Button ── -->
+<button class="music-btn" id="musicBtn" title="Play/Pause Music" aria-label="Toggle background music">
+  &#x266B;
+</button>
+
+<!-- ── Scroll Hint ── -->
+<div class="scroll-hint" id="scrollHint">
+  <span>scroll down</span>
+  <span class="arrow">&#x2193;</span>
+</div>
+
+<!-- ── Main Content ── -->
+<main>
+
+  <!-- Landing -->
+  <section class="landing">
+    <div class="landing-inner">
+      <span class="landing-clover">&#x1F340;</span>
+      <h1>For Mithuu</h1>
+      <hr class="landing-divider">
+      <p class="subtitle">some feelings stay longer than words.</p>
+    </div>
+  </section>
+
+  <!-- Divider -->
+  <div class="section-break reveal">&#x2729; &#x2729; &#x2729;</div>
+
+  <!-- Letter Section -->
+  <section class="letter-section">
+    <div class="paper-card tilt-right reveal">
+      <div class="tape tape-top-left"></div>
+      <div class="tape tape-top-right"></div>
+      <span class="card-doodle top-right">&#x1F412;</span>
+      <span class="card-doodle bottom-right">&#x1F42D;</span>
+      <div class="ink-splat" style="bottom: 15%; left: 8%;"></div>
+
+      <h2 class="section-label">a letter i never sent</h2>
+
+      <div class="letter-body">
+
+        <p class="letter-greeting">Mithuu …</p>
+
+        <p>mujhe pata hai us din maine tumhe bohot hurt kiya tha. Tumhara special day tha, aur tumhe special feel karwane ke bajaye maine us din ko aur heavy bana diya. Shayad us waqt bhi maine sorry bola tha… par honestly, uske baad se ek bhi din aisa nahi gaya jahan maine tumhe yaad na kiya ho, ya us baat ko yaad karke regret na feel kiya ho betu.</p>
+
+        <p>Aur I know ki shayad us cheez ke liye tum mujhe kabhi maaf bhi nahi kar paogi. Aur sach kahu to mai samajh sakta hu kyuki wo din tumhare liye humesha ke liye kharab ho gaya meri wajah se. Aur Mai genuinely bohot regret feel karta hu us sab ke liye… par mujhe pata hai ki kuch cheezon ke liye sirf "sorry" enough nahi hota.</p>
+
+        <p>Aur fir jab tumne mujhe wo poem di thi na… pata nahi kyu, par usne mujhe aur tod diya tha andar se miithu. Us din ke baad se aisa ek bhi din nahi hai jab maine wo poem na padhi ho. Roz padhta tha usse… aur pata nahi kyu, woh poem mujhe ek saath special, loved aur heartbroken feel karwati thi.</p>
+
+        <p>Kyuki us sab ke baad bhi… jo maine tumhare saath kiya, jis tarah maine tumhe hurt kiya… uske baad bhi tumne mujhe itni softness se dekha, itna deeply feel kiya, aur woh poem bheji mujhe.</p>
+
+        <p>Har baar bas yehi feel hota raha ki jis insaan ne mujhe itne pyar se feel kiya… mai usko us din sirf hurt hi feel karwa paya and nothing else.</p>
+
+        <div class="letter-quote-box">
+          "Sabse zyada dard shayad wahi rishte dete hain<br>
+          jinme mohabbat to poori hoti hai…<br>
+          par waqt aur samajh adhure reh jaate hain."
+        </div>
+
+        <p>Aur shayad meri sabse badi problem hamesha yehi rahi hai ki mai tumhe kabhi properly feel hi nahi karwa paya ki tum mere liye kitni important ho. Kitna matter karti ho. Kitna genuinely care karta hu mai tumhare liye.</p>
+
+        <p>Par sach ye hai ki tum bohot deeply matter karti thi… aur karti ho. Tum mere liye bohot special thi… aur ho bhi. Bohot zyada.</p>
+
+        <p>Aur jitna zyada waqt beet raha hai, utna hi zyada samajh aa raha hai ki tumne mujhe kitni achhi tarah samjha tha… aur mai kitni cheeze late samajhta raha mithu.</p>
+
+        <p>Kabhi kabhi lagta hai ki tumhara Bikuu bas thoda aur jaldi samajh pata tumhe… to shayad itna hurt nahi karta tumhe.</p>
+
+        <p>Jo hurt tumhe meri wajah se hua uska regret mere andar humesha rahega.</p>
+
+        <p>Aur isi liye… tumne jo poem mere liye likhi thi, usi ke jawab me maine bhi ek poem likhne ki koshish ki hai. Haan, usme maine ChatGPT ki help li hai… bhale words pure mere na ho, par feelings poori meri hain. Aur I hope wo tum tak pahunch paayein.</p>
+
+        <p>Mai bas itni koshish kar raha hu ki jo feelings itne time se mere andar hain… woh ek baar tum tak honestly pahunch jaayein.</p>
+
+        <p class="letter-closing">– Tumhara Bikuu &#x1F412;</p>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- Divider -->
+  <div class="section-break reveal">&#x2764;&#xFE0F;</div>
+
+  <!-- Poem Section -->
+  <section class="poem-section">
+    <div class="paper-card tilt-left reveal">
+      <div class="tape tape-top-left"></div>
+      <div class="tape tape-top-right"></div>
+      <span class="card-doodle top-right">&#x1F319;</span>
+      <span class="card-doodle bottom-left">&#x1F33B;</span>
+      <div class="ink-splat" style="top: 20%; right: 10%;"></div>
+
+      <h2 class="section-label">a poem for you</h2>
+
+      <div class="poem-body">
+
+        <div class="stanza">
+          The way she understands even my silence,
+          it feels as if
+          the storms inside my chest
+          somehow soften before reaching her.
+        </div>
+
+        <div class="stanza">
+          And the way she stays beside me
+          when I am tangled within myself,
+          like quiet moonlight resting gently
+          on restless water.
+        </div>
+
+        <div class="stanza">
+          That girl…
+          even while fighting wars inside her own mind,
+          still makes space for me,
+          as if somewhere in her heart
+          there is always a corner meant for me.
+        </div>
+
+        <div class="stanza">
+          There is a warmth in her presence
+          that feels like winter sunlight—
+          soft, quiet,
+          yet enough to make cold things bloom again.
+        </div>
+
+        <div class="stanza">
+          And the way she cares…
+          it never arrives loudly.
+          It settles slowly,
+          like the scent of rain on dry earth—
+          almost invisible,
+          yet impossible not to feel.
+        </div>
+
+        <div class="stanza">
+          She never asks me to change,
+          and still, I begin changing.
+          She never forces me to open up,
+          yet somehow
+          I find myself placing my hidden thoughts
+          gently into her hands.
+        </div>
+
+        <div class="stanza">
+          A person
+          who once buried feelings in silence,
+          starts losing track of time with her,
+          turning long nights into small moments,
+          finding her in ordinary things
+          without even realizing it.
+        </div>
+
+        <div class="stanza">
+          As if little pieces of her
+          have quietly woven themselves
+          into the fabric of my days.
+        </div>
+
+        <div class="stanza">
+          And maybe the most beautiful thing about her
+          is that she never separates me
+          from my flaws.
+        </div>
+
+        <div class="stanza">
+          When I take too long to understand,
+          she answers me with patience.
+          When I disappear into silence,
+          she still tries to read the ache behind it.
+        </div>
+
+        <div class="stanza">
+          And sometimes,
+          that is the part that hurts the most—
+
+          the way she understands me
+          with such gentleness,
+          while I am still learning
+          how to understand her back.
+        </div>
+
+        <div class="stanza">
+          Because she is never difficult to love.
+        </div>
+
+        <div class="stanza">
+          She is soft in the way rain is soft,
+          and strong in the way oceans are strong.
+        </div>
+
+        <div class="stanza">
+          And even now,
+          when I think of peace,
+          of warmth,
+          of feeling accepted without needing to explain myself—
+
+          my mind still drifts toward her,
+          like tired waves returning to shore.
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+
+</main>
+
+<script>
+(function() {
+  'use strict';
+
+  // ── Force scroll to top on load ──
+  history.scrollRestoration = 'manual';
+  window.scrollTo(0, 0);
+
+  // ── Opening curtain — opens on scroll or touch ──
+  const curtain = document.getElementById('curtain');
+  let curtainOpened = false;
+
+  function openCurtain() {
+    if (curtainOpened) return;
+    curtainOpened = true;
+    curtain.classList.add('open');
+    setTimeout(() => { curtain.style.display = 'none'; }, 1300);
+    window.removeEventListener('wheel', openCurtain);
+    window.removeEventListener('touchmove', openCurtain);
+    window.removeEventListener('keydown', openOnKey);
+  }
+
+  function openOnKey(e) {
+    if (e.key === 'ArrowDown' || e.key === ' ') openCurtain();
+  }
+
+  window.addEventListener('wheel', openCurtain, { passive: true });
+  window.addEventListener('touchmove', openCurtain, { passive: true });
+  window.addEventListener('keydown', openOnKey);
+
+  // ── Scroll reveal ──
+  const revealEls = document.querySelectorAll('.reveal');
+  const revealObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+        revealObserver.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.05, rootMargin: '0px 0px 50px 0px' });
+
+  revealEls.forEach(el => revealObserver.observe(el));
+
+  // ── Hide scroll hint on scroll ──
+  const scrollHint = document.getElementById('scrollHint');
+  let scrollHintHidden = false;
+  window.addEventListener('scroll', () => {
+    if (!scrollHintHidden && window.scrollY > 80) {
+      scrollHint.classList.add('hidden');
+      scrollHintHidden = true;
+    }
+  }, { passive: true });
+
+  // ── Floating particles ──
+  const particlesContainer = document.getElementById('particles');
+  const heartChars = ['❤️', '♡'];
+  const starChars = ['★', '✧', '✨', '·'];
+  const particleSizes = ['1rem', '1.3rem', '1.6rem', '1.1rem', '1.4rem'];
+
+  function createParticle() {
+    const p = document.createElement('span');
+    p.classList.add('particle');
+    const isStar = Math.random() > 0.4;
+    const chars = isStar ? starChars : heartChars;
+    p.textContent = chars[Math.floor(Math.random() * chars.length)];
+    if (isStar) p.classList.add('golden');
+    p.style.left = Math.random() * 100 + '%';
+    p.style.fontSize = particleSizes[Math.floor(Math.random() * particleSizes.length)];
+    const duration = 12 + Math.random() * 18;
+    p.style.animationDuration = duration + 's';
+    p.style.animationDelay = Math.random() * 5 + 's';
+    particlesContainer.appendChild(p);
+
+    setTimeout(() => { p.remove(); }, (duration + 6) * 1000);
+  }
+
+  // Initial batch
+  setTimeout(() => {
+    for (let i = 0; i < 8; i++) {
+      setTimeout(createParticle, i * 600);
+    }
+  }, 4000);
+
+  // Continuous particles
+  setInterval(createParticle, 3000);
+
+  // ── Music ──
+  // ╔══════════════════════════════════════════════════════╗
+  //   To use your own song, place the audio file (mp3,
+  //   m4a, wav, ogg) in the same folder as index.html
+  //   and change the filename below:
+  const SONG_FILE = 'song.mp3';
+  // ╚══════════════════════════════════════════════════════╝
+
+  const musicBtn = document.getElementById('musicBtn');
+  const audio = new Audio(SONG_FILE);
+  audio.loop = true;
+  audio.volume = 0.5;
+  let isPlaying = false;
+
+  function playMusic() {
+    audio.play().then(() => {
+      isPlaying = true;
+      musicBtn.classList.add('playing');
+      musicBtn.innerHTML = '&#x266B;';
+    }).catch(() => {
+      // Browser blocked autoplay — wait for first user click anywhere
+      const resumeOnClick = () => {
+        audio.play().then(() => {
+          isPlaying = true;
+          musicBtn.classList.add('playing');
+          musicBtn.innerHTML = '&#x266B;';
+        });
+        document.removeEventListener('click', resumeOnClick);
+      };
+      document.addEventListener('click', resumeOnClick);
+    });
+  }
+
+  // Auto-play when the curtain opens (triggered by scroll)
+  const origOpenCurtain = openCurtain;
+  const musicStartObserver = new MutationObserver(() => {
+    if (curtain.classList.contains('open')) {
+      playMusic();
+      musicStartObserver.disconnect();
+    }
+  });
+  musicStartObserver.observe(curtain, { attributes: true, attributeFilter: ['class'] });
+
+  musicBtn.addEventListener('click', () => {
+    if (isPlaying) {
+      audio.pause();
+      isPlaying = false;
+      musicBtn.classList.remove('playing');
+      musicBtn.innerHTML = '&#x25B6;';
+    } else {
+      audio.play();
+      isPlaying = true;
+      musicBtn.classList.add('playing');
+      musicBtn.innerHTML = '&#x266B;';
+    }
+  });
+
+  // ── Parallax doodles on scroll ──
+  const doodles = document.querySelectorAll('.doodle');
+  let ticking = false;
+  window.addEventListener('scroll', () => {
+    if (!ticking) {
+      requestAnimationFrame(() => {
+        const scrollY = window.scrollY;
+        doodles.forEach((d, i) => {
+          const speed = 0.02 + (i % 3) * 0.01;
+          d.style.transform = `translateY(${scrollY * speed}px)`;
+        });
+        ticking = false;
+      });
+      ticking = true;
+    }
+  }, { passive: true });
+
+})();
+</script>
+</body>
+</html>
