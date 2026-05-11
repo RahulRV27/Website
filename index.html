@@ -739,7 +739,7 @@ section {
   <div class="curtain-text">a little something, just for you...</div>
   <div class="curtain-heart">&#x1F49B;</div>
   <div class="curtain-scroll-hint">
-    <span>scroll to continue</span>
+    <span>tap to continue</span>
     <span class="curtain-arrow">&#x2193;</span>
   </div>
 </div>
@@ -975,7 +975,7 @@ section {
   history.scrollRestoration = 'manual';
   window.scrollTo(0, 0);
 
-  // ── Opening curtain — opens on scroll or touch ──
+  // ── Opening curtain — opens on tap/click ──
   const curtain = document.getElementById('curtain');
   let curtainOpened = false;
 
@@ -984,18 +984,12 @@ section {
     curtainOpened = true;
     curtain.classList.add('open');
     setTimeout(() => { curtain.style.display = 'none'; }, 1300);
-    window.removeEventListener('wheel', openCurtain);
-    window.removeEventListener('touchmove', openCurtain);
-    window.removeEventListener('keydown', openOnKey);
+    // Play music immediately inside this user gesture
+    playMusic();
   }
 
-  function openOnKey(e) {
-    if (e.key === 'ArrowDown' || e.key === ' ') openCurtain();
-  }
-
-  window.addEventListener('wheel', openCurtain, { passive: true });
-  window.addEventListener('touchmove', openCurtain, { passive: true });
-  window.addEventListener('keydown', openOnKey);
+  curtain.addEventListener('click', openCurtain);
+  curtain.addEventListener('touchend', openCurtain);
 
   // ── Scroll reveal ──
   const revealEls = document.querySelectorAll('.reveal');
@@ -1085,16 +1079,6 @@ section {
       document.addEventListener('click', resumeOnClick);
     });
   }
-
-  // Auto-play when the curtain opens (triggered by scroll)
-  const origOpenCurtain = openCurtain;
-  const musicStartObserver = new MutationObserver(() => {
-    if (curtain.classList.contains('open')) {
-      playMusic();
-      musicStartObserver.disconnect();
-    }
-  });
-  musicStartObserver.observe(curtain, { attributes: true, attributeFilter: ['class'] });
 
   musicBtn.addEventListener('click', () => {
     if (isPlaying) {
