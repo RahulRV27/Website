@@ -508,44 +508,6 @@ section {
   margin-bottom: 0;
 }
 
-/* ── Letter section ── */
-.letter-section {
-  padding-top: 2rem;
-}
-
-.letter-body {
-  font-family: 'La Belle Aurore', cursive;
-  font-size: clamp(1.1rem, 3vw, 1.35rem);
-  line-height: 2.1;
-  color: var(--text-ink);
-  position: relative;
-  z-index: 1;
-}
-
-.letter-body p {
-  margin-bottom: 1.2rem;
-  text-indent: 1.5rem;
-}
-
-.letter-body p:first-child {
-  text-indent: 0;
-}
-
-.letter-body .letter-greeting {
-  font-family: 'Caveat', cursive;
-  font-size: 1.4rem;
-  font-weight: 600;
-  text-indent: 0;
-  margin-bottom: 1.5rem;
-}
-
-.letter-body .letter-closing {
-  text-indent: 0;
-  margin-top: 2rem;
-  text-align: right;
-  font-style: italic;
-}
-
 /* ── Ending section ── */
 .ending-section {
   min-height: 60vh;
@@ -623,25 +585,6 @@ section {
   right: 16px;
 }
 
-/* ── Inline quote box ── */
-.letter-quote-box {
-  margin: 2rem 0;
-  padding: 1.5rem 2rem;
-  background: linear-gradient(135deg, rgba(212,160,160,0.08) 0%, rgba(201,169,110,0.06) 100%);
-  border-left: 3px solid var(--accent-rose);
-  border-radius: 0 12px 12px 0;
-  font-family: 'Dancing Script', cursive;
-  font-size: clamp(1.15rem, 3vw, 1.4rem);
-  font-weight: 500;
-  line-height: 1.8;
-  color: var(--text-ink);
-  text-indent: 0;
-  text-align: center;
-  font-style: italic;
-  opacity: 0.9;
-  box-shadow: 0 2px 12px rgba(74, 55, 40, 0.06);
-}
-
 /* ── Ink splatter decoration ── */
 .ink-splat {
   position: absolute;
@@ -692,9 +635,6 @@ section {
     line-height: 1.9;
   }
 
-  .letter-body {
-    line-height: 1.95;
-  }
 }
 
 @media (max-width: 400px) {
@@ -788,60 +728,6 @@ section {
 
   <!-- Divider -->
   <div class="section-break reveal">&#x2729; &#x2729; &#x2729;</div>
-
-  <!-- Letter Section -->
-  <section class="letter-section">
-    <div class="paper-card tilt-right reveal">
-      <div class="tape tape-top-left"></div>
-      <div class="tape tape-top-right"></div>
-      <span class="card-doodle top-right">&#x1F412;</span>
-      <span class="card-doodle bottom-right">&#x1F42D;</span>
-      <div class="ink-splat" style="bottom: 15%; left: 8%;"></div>
-
-      <h2 class="section-label">a letter i never sent</h2>
-
-      <div class="letter-body">
-
-        <p class="letter-greeting">Mithuu …</p>
-
-        <p>mujhe pata hai us din maine tumhe bohot hurt kiya tha. Tumhara special day tha, aur tumhe special feel karwane ke bajaye maine us din ko aur heavy bana diya. Shayad us waqt bhi maine sorry bola tha… par honestly, uske baad se ek bhi din aisa nahi gaya jahan maine tumhe yaad na kiya ho, ya us baat ko yaad karke regret na feel kiya ho betu.</p>
-
-        <p>Aur I know ki shayad us cheez ke liye tum mujhe kabhi maaf bhi nahi kar paogi. Aur sach kahu to mai samajh sakta hu kyuki wo din tumhare liye humesha ke liye kharab ho gaya meri wajah se. Aur Mai genuinely bohot regret feel karta hu us sab ke liye… par mujhe pata hai ki kuch cheezon ke liye sirf "sorry" enough nahi hota.</p>
-
-        <p>Aur fir jab tumne mujhe wo poem di thi na… pata nahi kyu, par usne mujhe aur tod diya tha andar se miithu. Us din ke baad se aisa ek bhi din nahi hai jab maine wo poem na padhi ho. Roz padhta tha usse… aur pata nahi kyu, woh poem mujhe ek saath special, loved aur heartbroken feel karwati thi.</p>
-
-        <p>Kyuki us sab ke baad bhi… jo maine tumhare saath kiya, jis tarah maine tumhe hurt kiya… uske baad bhi tumne mujhe itni softness se dekha, itna deeply feel kiya, aur woh poem bheji mujhe.</p>
-
-        <p>Har baar bas yehi feel hota raha ki jis insaan ne mujhe itne pyar se feel kiya… mai usko us din sirf hurt hi feel karwa paya and nothing else.</p>
-
-        <div class="letter-quote-box">
-          "Sabse zyada dard shayad wahi rishte dete hain<br>
-          jinme mohabbat to poori hoti hai…<br>
-          par waqt aur samajh adhure reh jaate hain."
-        </div>
-
-        <p>Aur shayad meri sabse badi problem hamesha yehi rahi hai ki mai tumhe kabhi properly feel hi nahi karwa paya ki tum mere liye kitni important ho. Kitna matter karti ho. Kitna genuinely care karta hu mai tumhare liye.</p>
-
-        <p>Par sach ye hai ki tum bohot deeply matter karti thi… aur karti ho. Tum mere liye bohot special thi… aur ho bhi. Bohot zyada.</p>
-
-        <p>Aur jitna zyada waqt beet raha hai, utna hi zyada samajh aa raha hai ki tumne mujhe kitni achhi tarah samjha tha… aur mai kitni cheeze late samajhta raha mithu.</p>
-
-        <p>Kabhi kabhi lagta hai ki tumhara Bikuu bas thoda aur jaldi samajh pata tumhe… to shayad itna hurt nahi karta tumhe.</p>
-
-        <p>Jo hurt tumhe meri wajah se hua uska regret mere andar humesha rahega.</p>
-
-        <p>Aur isi liye… tumne jo poem mere liye likhi thi, usi ke jawab me maine bhi ek poem likhne ki koshish ki hai. Haan, usme maine ChatGPT ki help li hai… bhale words pure mere na ho, par feelings poori meri hain. Aur I hope wo tum tak pahunch paayein.</p>
-
-        <p>Mai bas itni koshish kar raha hu ki jo feelings itne time se mere andar hain… woh ek baar tum tak honestly pahunch jaayein.</p>
-
-        <p class="letter-closing">– Tumhara Bikuu &#x1F412;</p>
-
-      </div>
-    </div>
-  </section>
-
-  <!-- Divider -->
-  <div class="section-break reveal">&#x2764;&#xFE0F;</div>
 
   <!-- Poem Section -->
   <section class="poem-section">
